@@ -17,12 +17,9 @@ class _HomePageState extends State<HomePage> {
   List<String> listStateInProgress = [];
   List<String> listStateDone = [];
 
-  // var currentIndex = 0;
-  // var currentState = "";
-
-  var fromStatus = "";
-  var toStatus = "";
-  var currentIndex = 0;
+  String fromStatus = "";
+  String toStatus = "";
+  int currentIndex = 0;
 
   @override
   void initState() {
@@ -126,57 +123,40 @@ class _HomePageState extends State<HomePage> {
                                       title: Text(item),
                                     ),
                                     onDragCompleted: () {
-                                      debugPrint("To do - onDragCompleted");
-
-                                      debugPrint(
-                                          "To do currentIndex: $currentIndex");
-                                      debugPrint(
-                                          "To do fromStatus: $fromStatus");
-
-                                      if (fromStatus == "Todo") {
-                                        setState(() {
-                                          listStateTodos.removeAt(currentIndex);
-                                        });
+                                      if (toStatus != "Todo") {
+                                        listStateTodos.removeAt(currentIndex);
                                       }
 
                                       if (fromStatus == "In progress") {
-                                        setState(() {
-                                          listStateInProgress
-                                              .removeAt(currentIndex);
-                                        });
+                                        listStateInProgress
+                                            .removeAt(currentIndex);
                                       }
 
                                       if (fromStatus == "Done") {
-                                        setState(() {
-                                          listStateDone.removeAt(currentIndex);
-                                        });
+                                        listStateDone.removeAt(currentIndex);
                                       }
+
+                                      setState(() {});
                                     },
                                     onDragStarted: () {
-                                      debugPrint("To do - onDragStarted");
-
                                       setState(() {
                                         fromStatus = "Todo";
                                         currentIndex = index;
                                       });
                                     },
-                                    onDragEnd: (details) {
-                                      debugPrint("To do - onDragEnd");
-                                    },
                                   );
                                 },
                               ),
                     onAccept: (data) {
-                      debugPrint("To do - onAccept");
-
-                      var dataParsed = data! as String;
-                      listStateTodos.add(dataParsed);
+                      if (fromStatus != "Todo") {
+                        var dataParsed = data! as String;
+                        listStateTodos.add(dataParsed);
+                      }
                     },
                     onMove: (details) {
-                      debugPrint("To do - onMove");
-                    },
-                    onLeave: (data) {
-                      debugPrint("To do - onLeave");
+                      setState(() {
+                        toStatus = "Todo";
+                      });
                     },
                   ),
                 ),
@@ -264,51 +244,40 @@ class _HomePageState extends State<HomePage> {
                                       title: Text(item),
                                     ),
                                     onDragCompleted: () {
-                                      debugPrint("currentIndex: $currentIndex");
-                                      debugPrint("fromStatus: $fromStatus");
-
-                                      if (fromStatus == "In progress") {
-                                        setState(() {
-                                          listStateInProgress
-                                              .removeAt(currentIndex);
-                                        });
+                                      if (toStatus != "In progress") {
+                                        listStateInProgress
+                                            .removeAt(currentIndex);
                                       }
 
                                       if (fromStatus == "Todo") {
-                                        setState(() {
-                                          listStateTodos.removeAt(currentIndex);
-                                        });
+                                        listStateTodos.removeAt(currentIndex);
                                       }
 
                                       if (fromStatus == "Done") {
-                                        setState(() {
-                                          listStateDone.removeAt(currentIndex);
-                                        });
+                                        listStateDone.removeAt(currentIndex);
                                       }
+
+                                      setState(() {});
                                     },
                                     onDragStarted: () {
-                                      debugPrint("In Progress - onDragStarted");
-
                                       setState(() {
                                         fromStatus = "In progress";
                                         currentIndex = index;
                                       });
                                     },
-                                    onDragEnd: (details) {
-                                      debugPrint("In Progress - onDragEnd");
-                                    },
                                   );
                                 },
                               ),
                     onAccept: (data) {
-                      var dataParsed = data! as String;
-                      listStateInProgress.add(dataParsed);
+                      if (fromStatus != "In progress") {
+                        var dataParsed = data! as String;
+                        listStateInProgress.add(dataParsed);
+                      }
                     },
                     onMove: (details) {
-                      debugPrint("In Progres - onMove");
-                    },
-                    onLeave: (data) {
-                      debugPrint("In Progres - onLeave");
+                      setState(() {
+                        toStatus = "In progress";
+                      });
                     },
                   ),
                 ),
@@ -395,55 +364,43 @@ class _HomePageState extends State<HomePage> {
                                       title: Text(item),
                                     ),
                                     onDragCompleted: () {
-                                      debugPrint("Done - onDragCompleted");
-
-                                      debugPrint("currentIndex: $currentIndex");
-                                      debugPrint("fromStatus: $fromStatus");
-
-                                      if (fromStatus == "Done") {
-                                        setState(() {
-                                          listStateDone.removeAt(currentIndex);
-                                        });
+                                      if (toStatus != "Done") {
+                                        listStateDone.removeAt(currentIndex);
                                       }
 
                                       if (fromStatus == "In progress") {
-                                        setState(() {
-                                          listStateInProgress
-                                              .removeAt(currentIndex);
-                                        });
+                                        listStateInProgress
+                                            .removeAt(currentIndex);
                                       }
 
                                       if (fromStatus == "Todo") {
-                                        setState(() {
-                                          listStateTodos.removeAt(currentIndex);
-                                        });
+                                        listStateTodos.removeAt(currentIndex);
                                       }
+
+                                      setState(() {});
                                     },
                                     onDragStarted: () {
-                                      debugPrint("Done - onDragStarted");
-
                                       setState(() {
                                         currentIndex = index;
                                         fromStatus = "Done";
                                       });
                                     },
-                                    onDragEnd: (details) {
-                                      debugPrint("Done - onDragEnd");
-                                    },
+                                    onDragEnd: (details) {},
                                   );
                                 },
                               ),
                     onAccept: (data) {
-                      var dataParsed = data! as String;
-
-                      listStateDone.add(dataParsed);
+                      if (fromStatus != "Done") {
+                        var dataParsed = data! as String;
+                        listStateDone.add(dataParsed);
+                      }
                     },
                     onMove: (details) {
-                      debugPrint("Done - onMove");
+                      setState(() {
+                        toStatus = "Done";
+                      });
                     },
-                    onLeave: (data) {
-                      debugPrint("Done - onLeave");
-                    },
+                    onLeave: (data) {},
                   ),
                 ),
               ],
