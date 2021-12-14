@@ -22,6 +22,7 @@ class _HomePageState extends State<HomePage> {
   int currentIndex = 0;
 
   String newColumnName = "";
+  String currentDescription = "";
 
   @override
   void initState() {
@@ -73,9 +74,55 @@ class _HomePageState extends State<HomePage> {
                 Flexible(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
-                      InkWell(child: Icon(Icons.add)),
-                      InkWell(child: Icon(Icons.more_horiz))
+                    children: [
+                      InkWell(
+                          onTap: () => showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  title: const Text('Add new item'),
+                                  content: TextField(
+                                    keyboardType: TextInputType.text,
+                                    autofocus: true,
+                                    decoration: const InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        hintText: 'Description'),
+                                    onChanged: (String newValue) =>
+                                        currentDescription = newValue,
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, 'Cancel'),
+                                      child: const Text(
+                                        'Cancel',
+                                        style: TextStyle(
+                                          color: Colors.redAccent,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          List<String> list = statusList[key];
+                                          list.add(currentDescription);
+                                        });
+
+                                        Navigator.pop(context, 'OK');
+                                      },
+                                      child: const Text(
+                                        'OK',
+                                        style: TextStyle(
+                                          color: Colors.blueAccent,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                          child: const Icon(Icons.add)),
+                      const InkWell(child: Icon(Icons.more_horiz))
                     ],
                   ),
                 ),
