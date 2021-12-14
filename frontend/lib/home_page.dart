@@ -139,6 +139,61 @@ class _HomePageState extends State<HomePage> {
                           if (newValueDropDropdownSelected == "Clear") {
                             setState(() => listOfTasksByKey.clear());
                           }
+
+                          if (newValueDropDropdownSelected == "Update title") {
+                            showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title: const Text('Add new item'),
+                                content: TextField(
+                                  keyboardType: TextInputType.text,
+                                  autofocus: true,
+                                  decoration: const InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      hintText: 'Description'),
+                                  onChanged: (String newValue) =>
+                                      newColumnName = newValue,
+                                ),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(context, 'Cancel'),
+                                    child: const Text(
+                                      'Cancel',
+                                      style: TextStyle(
+                                        color: Colors.redAccent,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      debugPrint("Clicked.");
+                                      setState(() {
+                                        List<String>? oldList =
+                                            listOfTasksByKey;
+
+                                        Map<String, List<String>> newList = {
+                                          newColumnName: oldList
+                                        };
+                                        statusList.addAll(newList);
+                                        statusList.remove(key);
+                                      });
+
+                                      Navigator.pop(context, 'OK');
+                                    },
+                                    child: const Text(
+                                      'OK',
+                                      style: TextStyle(
+                                        color: Colors.blueAccent,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
                         },
                         items: <String>[
                           'Clear',
