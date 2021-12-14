@@ -48,7 +48,6 @@ class _HomePageState extends State<HomePage> {
 
     for (var key in statusListKeys) {
       List<String>? listOfTasksByKey = statusList[key];
-      debugPrint("for");
 
       Widget item = Expanded(
         child: Column(
@@ -168,7 +167,6 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   TextButton(
                                     onPressed: () {
-                                      debugPrint("Clicked.");
                                       setState(() {
                                         List<String>? oldList =
                                             listOfTasksByKey;
@@ -262,6 +260,7 @@ class _HomePageState extends State<HomePage> {
                                   title: Text(item),
                                   trailing: Row(
                                     mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       InkWell(
                                         child: const Icon(
@@ -336,7 +335,52 @@ class _HomePageState extends State<HomePage> {
                                             ),
                                           );
                                         },
-                                      )
+                                      ),
+                                      DropdownButton<String>(
+                                        value: actionDropDownSelected,
+                                        icon: const Icon(
+                                          Icons.more_horiz,
+                                          color: Colors.black,
+                                        ),
+                                        elevation: 2,
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        underline: Container(
+                                            color: Colors.transparent),
+                                        items: statusListKeys
+                                            .where((actionStatus) =>
+                                                actionStatus != key)
+                                            .map<String>((e) => 'Move to $e')
+                                            .toList()
+                                            .map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList(),
+                                        onChanged: (String?
+                                            newValueDropDropdownSelected) {
+                                          var stateMoveTo =
+                                              newValueDropDropdownSelected!
+                                                  .split("Move to")
+                                                  .join(" ")
+                                                  .replaceAll('\"', "")
+                                                  .trim();
+
+                                          setState(() {
+                                            List<String>? targetList =
+                                                statusList[stateMoveTo];
+
+                                            targetList!.add(listOfTasksByKey
+                                                .elementAt(index));
+                                            listOfTasksByKey.removeAt(index);
+                                          });
+                                        },
+                                      ),
+                                      // * Move actions
                                     ],
                                   ),
                                 ),
