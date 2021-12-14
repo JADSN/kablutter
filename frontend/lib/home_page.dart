@@ -21,6 +21,8 @@ class _HomePageState extends State<HomePage> {
   String toStatus = "";
   int currentIndex = 0;
 
+  String newColumnName = "";
+
   @override
   void initState() {
     super.initState();
@@ -37,8 +39,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   List<Widget> generateStatuses() {
-    // var allStatuses = statusList.entries.toList();
-
     var statusListKeys = statusList.keys.toList();
     List<Widget> resultList = [];
 
@@ -86,13 +86,22 @@ class _HomePageState extends State<HomePage> {
                 builder: (BuildContext context, List<Object?> candidateData,
                         List<dynamic> rejectedData) =>
                     listStateTodos.isEmpty
-                        ? const Center(
-                            child: Text(
-                              "EMPTY LIST",
-                              style: TextStyle(
+                        ? Center(
+                            child: Text.rich(
+                              TextSpan(text: "LIST", children: [
+                                const TextSpan(text: " "),
+                                TextSpan(
+                                  text: "''$key''",
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const TextSpan(text: " "),
+                                const TextSpan(text: "IS EMPTY "),
+                              ]),
+                              style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 18,
-                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           )
@@ -133,9 +142,8 @@ class _HomePageState extends State<HomePage> {
 
                                   setState(() {});
                                 },
-                                onDragStarted: () {
-                                  setState(() => fromStatus = key);
-                                },
+                                onDragStarted: () =>
+                                    setState(() => fromStatus = key),
                               );
                             },
                           ),
@@ -145,9 +153,7 @@ class _HomePageState extends State<HomePage> {
                     listOfTasksByKey.add(dataParsed);
                   }
                 },
-                onMove: (details) {
-                  setState(() => toStatus = key);
-                },
+                onMove: (details) => setState(() => toStatus = key),
               ),
             ),
           ],
@@ -164,380 +170,21 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: generateStatuses(),
-          // children: [
-          //     //* List To do
-          //     Expanded(
-          //       child: Column(
-          //         children: [
-          //           Row(
-          //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //             children: [
-          //               Flexible(
-          //                 child: Row(
-          //                   mainAxisAlignment: MainAxisAlignment.start,
-          //                   children: [
-          //                     Padding(
-          //                       padding: const EdgeInsets.all(10.0),
-          //                       child: Chip(
-          //                           label: Text(
-          //                         "${listStateTodos.length}",
-          //                         style: const TextStyle(
-          //                             fontWeight: FontWeight.bold),
-          //                       )),
-          //                     ),
-          //                     const Text(
-          //                       "To do",
-          //                       style: TextStyle(fontWeight: FontWeight.bold),
-          //                     ),
-          //                   ],
-          //                 ),
-          //               ),
-          //               Flexible(
-          //                 child: Row(
-          //                   mainAxisAlignment: MainAxisAlignment.end,
-          //                   children: const [
-          //                     InkWell(child: Icon(Icons.add)),
-          //                     InkWell(child: Icon(Icons.more_horiz))
-          //                   ],
-          //                 ),
-          //               ),
-          //             ],
-          //           ),
-          //           Expanded(
-          //             child: DragTarget(
-          //               builder: (BuildContext context,
-          //                       List<Object?> candidateData,
-          //                       List<dynamic> rejectedData) =>
-          //                   listStateTodos.isEmpty
-          //                       ? const Center(
-          //                           child: Text(
-          //                             "EMPTY LIST",
-          //                             style: TextStyle(
-          //                               color: Colors.black,
-          //                               fontSize: 18,
-          //                               fontWeight: FontWeight.bold,
-          //                             ),
-          //                           ),
-          //                         )
-          //                       : ListView.builder(
-          //                           key: UniqueKey(),
-          //                           controller: ScrollController(),
-          //                           itemCount: listStateTodos.length,
-          //                           itemBuilder: (_, index) {
-          //                             var item = listStateTodos.elementAt(index);
-
-          //                             return Draggable(
-          //                               maxSimultaneousDrags: 1,
-          //                               data: item,
-          //                               feedback: Card(
-          //                                 elevation: 0,
-          //                                 color: Colors.grey[350],
-          //                                 child: Padding(
-          //                                   padding: const EdgeInsets.all(10.0),
-          //                                   child: Text(
-          //                                     item,
-          //                                     style: const TextStyle(
-          //                                       color: Colors.black,
-          //                                       fontSize: 18,
-          //                                     ),
-          //                                   ),
-          //                                 ),
-          //                               ),
-          //                               child: ListTile(
-          //                                 title: Text(item),
-          //                               ),
-          //                               onDragCompleted: () {
-          //                                 if (toStatus != "Todo") {
-          //                                   listStateTodos.removeAt(currentIndex);
-          //                                 }
-
-          //                                 if (fromStatus == "In progress") {
-          //                                   listStateInProgress
-          //                                       .removeAt(currentIndex);
-          //                                 }
-
-          //                                 if (fromStatus == "Done") {
-          //                                   listStateDone.removeAt(currentIndex);
-          //                                 }
-
-          //                                 setState(() {});
-          //                               },
-          //                               onDragStarted: () {
-          //                                 setState(() {
-          //                                   fromStatus = "Todo";
-          //                                   currentIndex = index;
-          //                                 });
-          //                               },
-          //                             );
-          //                           },
-          //                         ),
-          //               onAccept: (data) {
-          //                 if (fromStatus != "Todo") {
-          //                   var dataParsed = data! as String;
-          //                   listStateTodos.add(dataParsed);
-          //                 }
-          //               },
-          //               onMove: (details) {
-          //                 setState(() {
-          //                   toStatus = "Todo";
-          //                 });
-          //               },
-          //             ),
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-
-          //     //* List In progress
-          //     Expanded(
-          //       child: Column(
-          //         children: [
-          //           Row(
-          //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //             children: [
-          //               Flexible(
-          //                 child: Row(
-          //                   mainAxisAlignment: MainAxisAlignment.start,
-          //                   children: [
-          //                     Padding(
-          //                       padding: const EdgeInsets.all(10.0),
-          //                       child: Chip(
-          //                           label: Text(
-          //                         "${listStateInProgress.length}",
-          //                         style: const TextStyle(
-          //                             fontWeight: FontWeight.bold),
-          //                       )),
-          //                     ),
-          //                     const Text(
-          //                       "In progress",
-          //                       style: TextStyle(fontWeight: FontWeight.bold),
-          //                     ),
-          //                   ],
-          //                 ),
-          //               ),
-          //               Flexible(
-          //                 child: Row(
-          //                   mainAxisAlignment: MainAxisAlignment.end,
-          //                   children: const [
-          //                     InkWell(child: Icon(Icons.add)),
-          //                     InkWell(child: Icon(Icons.more_horiz))
-          //                   ],
-          //                 ),
-          //               ),
-          //             ],
-          //           ),
-          //           Expanded(
-          //             child: DragTarget(
-          //               builder: (BuildContext context,
-          //                       List<Object?> candidateData,
-          //                       List<dynamic> rejectedData) =>
-          //                   listStateInProgress.isEmpty
-          //                       ? const Center(
-          //                           child: Text(
-          //                             "EMPTY LIST",
-          //                             style: TextStyle(
-          //                               color: Colors.black,
-          //                               fontSize: 18,
-          //                               fontWeight: FontWeight.bold,
-          //                             ),
-          //                           ),
-          //                         )
-          //                       : ListView.builder(
-          //                           key: UniqueKey(),
-          //                           itemCount: listStateInProgress.length,
-          //                           controller: ScrollController(),
-          //                           itemBuilder: (_, index) {
-          //                             var item =
-          //                                 listStateInProgress.elementAt(index);
-
-          //                             return Draggable(
-          //                               data: item,
-          //                               maxSimultaneousDrags: 1,
-          //                               feedback: Card(
-          //                                 elevation: 0,
-          //                                 color: Colors.grey[350],
-          //                                 child: Padding(
-          //                                   padding: const EdgeInsets.all(10.0),
-          //                                   child: Text(
-          //                                     item,
-          //                                     style: const TextStyle(
-          //                                         color: Colors.black,
-          //                                         fontSize: 18),
-          //                                   ),
-          //                                 ),
-          //                               ),
-          //                               child: ListTile(
-          //                                 title: Text(item),
-          //                               ),
-          //                               onDragCompleted: () {
-          //                                 if (toStatus != "In progress") {
-          //                                   listStateInProgress
-          //                                       .removeAt(currentIndex);
-          //                                 }
-
-          //                                 if (fromStatus == "Todo") {
-          //                                   listStateTodos.removeAt(currentIndex);
-          //                                 }
-
-          //                                 if (fromStatus == "Done") {
-          //                                   listStateDone.removeAt(currentIndex);
-          //                                 }
-
-          //                                 setState(() {});
-          //                               },
-          //                               onDragStarted: () {
-          //                                 setState(() {
-          //                                   fromStatus = "In progress";
-          //                                   currentIndex = index;
-          //                                 });
-          //                               },
-          //                             );
-          //                           },
-          //                         ),
-          //               onAccept: (data) {
-          //                 if (fromStatus != "In progress") {
-          //                   var dataParsed = data! as String;
-          //                   listStateInProgress.add(dataParsed);
-          //                 }
-          //               },
-          //               onMove: (details) {
-          //                 setState(() {
-          //                   toStatus = "In progress";
-          //                 });
-          //               },
-          //             ),
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-
-          //     //* List Done
-          //     Expanded(
-          //       child: Column(
-          //         children: [
-          //           Row(
-          //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //             children: [
-          //               Flexible(
-          //                 child: Row(
-          //                   mainAxisAlignment: MainAxisAlignment.start,
-          //                   children: [
-          //                     Padding(
-          //                       padding: const EdgeInsets.all(10.0),
-          //                       child: Chip(
-          //                           label: Text(
-          //                         "${listStateDone.length}",
-          //                         style: const TextStyle(
-          //                             fontWeight: FontWeight.bold),
-          //                       )),
-          //                     ),
-          //                     const Text(
-          //                       "Done",
-          //                       style: TextStyle(fontWeight: FontWeight.bold),
-          //                     ),
-          //                   ],
-          //                 ),
-          //               ),
-          //               Flexible(
-          //                 child: Row(
-          //                   mainAxisAlignment: MainAxisAlignment.end,
-          //                   children: const [
-          //                     InkWell(child: Icon(Icons.add)),
-          //                     InkWell(child: Icon(Icons.more_horiz))
-          //                   ],
-          //                 ),
-          //               ),
-          //             ],
-          //           ),
-          //           Expanded(
-          //             child: DragTarget(
-          //               builder: (BuildContext context,
-          //                       List<Object?> candidateData,
-          //                       List<dynamic> rejectedData) =>
-          //                   listStateDone.isEmpty
-          //                       ? const Center(
-          //                           child: Text(
-          //                             "EMPTY LIST",
-          //                             style: TextStyle(
-          //                               color: Colors.black,
-          //                               fontSize: 18,
-          //                               fontWeight: FontWeight.bold,
-          //                             ),
-          //                           ),
-          //                         )
-          //                       : ListView.builder(
-          //                           key: UniqueKey(),
-          //                           itemCount: listStateDone.length,
-          //                           controller: ScrollController(),
-          //                           itemBuilder: (_, index) {
-          //                             var item = listStateDone.elementAt(index);
-
-          //                             return Draggable(
-          //                               data: item,
-          //                               maxSimultaneousDrags: 1,
-          //                               feedback: Card(
-          //                                 elevation: 0,
-          //                                 color: Colors.grey[350],
-          //                                 child: Padding(
-          //                                   padding: const EdgeInsets.all(10.0),
-          //                                   child: Text(
-          //                                     item,
-          //                                     style: const TextStyle(
-          //                                         color: Colors.black,
-          //                                         fontSize: 18),
-          //                                   ),
-          //                                 ),
-          //                               ),
-          //                               child: ListTile(
-          //                                 title: Text(item),
-          //                               ),
-          //                               onDragCompleted: () {
-          //                                 if (toStatus != "Done") {
-          //                                   listStateDone.removeAt(currentIndex);
-          //                                 }
-
-          //                                 if (fromStatus == "In progress") {
-          //                                   listStateInProgress
-          //                                       .removeAt(currentIndex);
-          //                                 }
-
-          //                                 if (fromStatus == "Todo") {
-          //                                   listStateTodos.removeAt(currentIndex);
-          //                                 }
-
-          //                                 setState(() {});
-          //                               },
-          //                               onDragStarted: () {
-          //                                 setState(() {
-          //                                   currentIndex = index;
-          //                                   fromStatus = "Done";
-          //                                 });
-          //                               },
-          //                               onDragEnd: (details) {},
-          //                             );
-          //                           },
-          //                         ),
-          //               onAccept: (data) {
-          //                 if (fromStatus != "Done") {
-          //                   var dataParsed = data! as String;
-          //                   listStateDone.add(dataParsed);
-          //                 }
-          //               },
-          //               onMove: (details) {
-          //                 setState(() {
-          //                   toStatus = "Done";
-          //                 });
-          //               },
-          //             ),
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-          // ],
-        ),
+        child: statusList.keys.isEmpty
+            ? const Center(
+                child: Text(
+                  "EMPTY LIST",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              )
+            : Row(
+                mainAxisSize: MainAxisSize.min,
+                children: generateStatuses(),
+              ),
       ),
       floatingActionButton: FloatingActionButton.small(
         backgroundColor: Colors.grey[350],
@@ -546,7 +193,50 @@ class _HomePageState extends State<HomePage> {
           Icons.plus_one,
           color: Colors.black,
         ),
-        onPressed: () {},
+        onPressed: () {
+          showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              title: const Text('Add Column'),
+              content: TextField(
+                keyboardType: TextInputType.text,
+                autofocus: true,
+                decoration: const InputDecoration(
+                    border: OutlineInputBorder(), hintText: 'Column name'),
+                onChanged: (String newValue) => newColumnName = newValue,
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'Cancel'),
+                  child: const Text(
+                    'Cancel',
+                    style: TextStyle(
+                      color: Colors.redAccent,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      Map<String, List<String>> map = {newColumnName: []};
+                      statusList.addAll(map);
+                    });
+
+                    Navigator.pop(context, 'OK');
+                  },
+                  child: const Text(
+                    'OK',
+                    style: TextStyle(
+                      color: Colors.blueAccent,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
