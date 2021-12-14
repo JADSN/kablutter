@@ -11,11 +11,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var states = ["Todo", "In progress", "Done"];
 
-  var statusList = <String, dynamic>{};
+  var statusList = <String, List<String>>{};
 
-  List<String> listStateTodos = [];
-  List<String> listStateInProgress = [];
-  List<String> listStateDone = [];
+  // List<String>? listStateTodos = [];
+  // List<String>? listStateInProgress = [];
+  // List<String>? listStateDone = [];
 
   String fromStatus = "";
   String toStatus = "";
@@ -24,19 +24,22 @@ class _HomePageState extends State<HomePage> {
   String newColumnName = "";
   String currentDescription = "";
 
+  String? actionDropDownSelected;
+
   @override
   void initState() {
     super.initState();
 
+    //* Bootstrap
     for (var state in states) {
       var items = List<String>.generate(3, (_) => getRandomString(5));
-      Map<String, dynamic> map = {state: items};
+      Map<String, List<String>> map = {state: items};
       statusList.addAll(map);
     }
 
-    listStateTodos = statusList["Todo"];
-    listStateInProgress = statusList["In progress"];
-    listStateDone = statusList["Done"];
+    // listStateTodos = statusList["Todo"];
+    // listStateInProgress = statusList["In progress"];
+    // listStateDone = statusList["Done"];
   }
 
   List<Widget> generateStatuses() {
@@ -44,7 +47,8 @@ class _HomePageState extends State<HomePage> {
     List<Widget> resultList = [];
 
     for (var key in statusListKeys) {
-      List<String> listOfTasksByKey = statusList[key];
+      List<String>? listOfTasksByKey = statusList[key];
+      debugPrint("for");
 
       Widget item = Expanded(
         child: Column(
@@ -60,7 +64,7 @@ class _HomePageState extends State<HomePage> {
                         padding: const EdgeInsets.all(10.0),
                         child: Chip(
                             label: Text(
-                          "${listOfTasksByKey.length}",
+                          "${listOfTasksByKey!.length}",
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         )),
                       ),
@@ -104,8 +108,8 @@ class _HomePageState extends State<HomePage> {
                                     TextButton(
                                       onPressed: () {
                                         setState(() {
-                                          List<String> list = statusList[key];
-                                          list.add(currentDescription);
+                                          List<String>? list = statusList[key];
+                                          list!.add(currentDescription);
                                         });
 
                                         Navigator.pop(context, 'OK');
@@ -122,7 +126,30 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                           child: const Icon(Icons.add)),
-                      const InkWell(child: Icon(Icons.more_horiz))
+                      DropdownButton<String>(
+                        value: actionDropDownSelected,
+                        icon: const Icon(Icons.more_horiz),
+                        elevation: 16,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        underline: Container(color: Colors.transparent),
+                        onChanged: (String? newValueDropDropdownSelected) {
+                          if (newValueDropDropdownSelected == "Clear") {
+                            setState(() => listOfTasksByKey.clear());
+                          }
+                        },
+                        items: <String>[
+                          'Clear',
+                          'Update title',
+                        ].map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
                     ],
                   ),
                 ),
@@ -132,7 +159,7 @@ class _HomePageState extends State<HomePage> {
               child: DragTarget(
                 builder: (BuildContext context, List<Object?> candidateData,
                         List<dynamic> rejectedData) =>
-                    listStateTodos.isEmpty
+                    listOfTasksByKey.isEmpty
                         ? Center(
                             child: Text.rich(
                               TextSpan(text: "LIST", children: [
@@ -182,12 +209,8 @@ class _HomePageState extends State<HomePage> {
                                 onDragCompleted: () {
                                   if (fromStatus != toStatus) {
                                     listOfTasksByKey.removeAt(currentIndex);
+                                    setState(() {});
                                   }
-
-                                  debugPrint(
-                                      "statusList.entries: $statusList.entries");
-
-                                  setState(() {});
                                 },
                                 onDragStarted: () =>
                                     setState(() => fromStatus = key),
