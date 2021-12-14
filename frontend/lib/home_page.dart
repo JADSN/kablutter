@@ -260,6 +260,85 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 child: ListTile(
                                   title: Text(item),
+                                  trailing: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      InkWell(
+                                        child: const Icon(
+                                          Icons.remove_circle,
+                                          color: Colors.redAccent,
+                                        ),
+                                        onTap: () {
+                                          setState(() {
+                                            listOfTasksByKey.removeAt(index);
+                                          });
+                                        },
+                                      ),
+                                      InkWell(
+                                        child: const Icon(
+                                          Icons.edit,
+                                          color: Colors.orangeAccent,
+                                        ),
+                                        onTap: () {
+                                          showDialog<String>(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                AlertDialog(
+                                              title: const Text('Add Column'),
+                                              content: TextField(
+                                                keyboardType:
+                                                    TextInputType.text,
+                                                autofocus: true,
+                                                decoration:
+                                                    const InputDecoration(
+                                                        border:
+                                                            OutlineInputBorder(),
+                                                        hintText:
+                                                            'Column name'),
+                                                onChanged: (String newValue) =>
+                                                    currentDescription =
+                                                        newValue,
+                                              ),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                          context, 'Cancel'),
+                                                  child: const Text(
+                                                    'Cancel',
+                                                    style: TextStyle(
+                                                      color: Colors.redAccent,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    listOfTasksByKey[index] =
+                                                        currentDescription;
+
+                                                    Navigator.pop(
+                                                        context, 'Edit');
+
+                                                    setState(() {});
+                                                  },
+                                                  child: const Text(
+                                                    'Edit',
+                                                    style: TextStyle(
+                                                      color: Colors.blueAccent,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      )
+                                    ],
+                                  ),
                                 ),
                                 onDragCompleted: () {
                                   if (fromStatus != toStatus) {
@@ -318,50 +397,48 @@ class _HomePageState extends State<HomePage> {
           Icons.plus_one,
           color: Colors.black,
         ),
-        onPressed: () {
-          showDialog<String>(
-            context: context,
-            builder: (BuildContext context) => AlertDialog(
-              title: const Text('Add Column'),
-              content: TextField(
-                keyboardType: TextInputType.text,
-                autofocus: true,
-                decoration: const InputDecoration(
-                    border: OutlineInputBorder(), hintText: 'Column name'),
-                onChanged: (String newValue) => newColumnName = newValue,
-              ),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () => Navigator.pop(context, 'Cancel'),
-                  child: const Text(
-                    'Cancel',
-                    style: TextStyle(
-                      color: Colors.redAccent,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      Map<String, List<String>> map = {newColumnName: []};
-                      statusList.addAll(map);
-                    });
-
-                    Navigator.pop(context, 'OK');
-                  },
-                  child: const Text(
-                    'OK',
-                    style: TextStyle(
-                      color: Colors.blueAccent,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
+        onPressed: () => showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Add Column'),
+            content: TextField(
+              keyboardType: TextInputType.text,
+              autofocus: true,
+              decoration: const InputDecoration(
+                  border: OutlineInputBorder(), hintText: 'Column name'),
+              onChanged: (String newValue) => newColumnName = newValue,
             ),
-          );
-        },
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'Cancel'),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(
+                    color: Colors.redAccent,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    Map<String, List<String>> map = {newColumnName: []};
+                    statusList.addAll(map);
+                  });
+
+                  Navigator.pop(context, 'OK');
+                },
+                child: const Text(
+                  'OK',
+                  style: TextStyle(
+                    color: Colors.blueAccent,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
