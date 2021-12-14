@@ -1,0 +1,9 @@
+[package]
+edition = "2021"
+name = "backend"
+version = "0.1.0"
+
+[dependencies]
+async-std = {version = "1.10.0", features = ["attributes"]}
+serde = {version = "1.0.131", features = ["derive"]}
+tide = "0.16.0"
